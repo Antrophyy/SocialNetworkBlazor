@@ -1,0 +1,48 @@
+﻿<div class="top-row pl-4 navbar navbar-dark">
+    <a class="navbar-brand" href="">SocialNetworkBlazor</a>
+    <button class="navbar-toggler" @onclick="ToggleFriendsList">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+</div>
+
+<div class="@FriendListCssClass" @onclick="ToggleFriendsList">
+    <ul class="nav flex-column">
+        @foreach (var user in Users)
+        {
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href="@user.Email" Match="NavLinkMatch.All">
+                    <span class="oi oi-home" aria-hidden="true"></span> @user.FullName
+                </NavLink>
+            </li>
+        }
+    </ul>
+</div>
+
+@inject HttpClient Http
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+
+@code {
+    public List<ClientUser> Users { get; set; } = new List<ClientUser>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            Users = await Http.GetFromJsonAsync<List<ClientUser>>("api/Users");
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+    }
+
+    private bool collapseFriendsLists = true;
+
+    private string FriendListCssClass => collapseFriendsLists ? "collapse" : null;
+
+    private void ToggleFriendsList()
+    {
+        collapseFriendsLists = !collapseFriendsLists;
+    }
+}

@@ -27,10 +27,10 @@ namespace SocialNetworkBlazor.Server.Controllers
 
         // GET: api/Users
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ClientUser>>> GetAllUsers()
+        public async Task<ActionResult<List<ClientUser>>> GetAllUsers()
         {
             var userList = await _uow.UserRepository.GetData().ConfigureAwait(false);
-            var mappedList = _mapper.Map<IEnumerable<ClientUser>>(userList);
+            var mappedList = _mapper.Map<List<ClientUser>>(userList);
             _logger.LogInformation($"Returned {userList.Count()} users.");
 
             return Ok(mappedList);
