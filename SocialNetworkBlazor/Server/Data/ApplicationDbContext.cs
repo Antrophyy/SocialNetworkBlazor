@@ -6,7 +6,7 @@ using SocialNetworkBlazor.Server.Models;
 
 namespace SocialNetworkBlazor.Server.Data
 {
-    public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
+    public class ApplicationDbContext : ApiAuthorizationDbContext<User>
     {
         public ApplicationDbContext(
             DbContextOptions options,
