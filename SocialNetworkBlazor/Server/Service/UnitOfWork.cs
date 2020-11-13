@@ -9,6 +9,7 @@ namespace SocialNetworkBlazor.Server.Service
     public class UnitOfWork : IUnitOfWork, IDisposable
     {
         private IRepository<User> _userRepository;
+        private IRepository<Message> _messageRepository;
         private readonly ApplicationDbContext _context;
         private bool disposed;
 
@@ -24,6 +25,16 @@ namespace SocialNetworkBlazor.Server.Service
                 if (_userRepository == null)
                     _userRepository = new Repository<User>(_context);
                 return _userRepository;
+            }
+        }
+        
+        public IRepository<Message> MessageRepository
+        {
+            get
+            {
+                if (_messageRepository == null)
+                    _messageRepository = new Repository<Message>(_context);
+                return _messageRepository;
             }
         }
 

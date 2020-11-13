@@ -10,6 +10,12 @@ namespace SocialNetworkBlazor.Server
         {
             CreateMap<User, ClientUser>();
             CreateMap<ClientUser, User>();
+
+            CreateMap<Message, ClientMessage>();
+            CreateMap<ClientMessage, Message>();
+
+            CreateMap<ClientMessageCreate, Message>();
+            CreateMap<Message, ClientMessageCreate>();
         }
     }
 }

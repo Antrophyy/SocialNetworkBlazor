@@ -2,4 +2,31 @@
 <h1>Hello, world!</h1>
 
 <p>Ahoj</p>
+@if (User.Identity.IsAuthenticated)
+{
+    <h2>Claims</h2>
+    <table class="table table-sm">
+        @foreach (var claim in User.Claims)
+        {
+            <tr>
+                <td>@claim.Type</td>
+                <td>@claim.Value</td>
+            </tr>
+        }
+    </table>
+}
 
+@code
+{
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationStateTask { get; set; }
+
+    public System.Security.Claims.ClaimsPrincipal User { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        var authState = await authenticationStateTask;
+        User = authState.User;
+    }
+
+}

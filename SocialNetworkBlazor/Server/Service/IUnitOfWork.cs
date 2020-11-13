@@ -7,6 +7,7 @@ namespace SocialNetworkBlazor.Server.Service
     public interface IUnitOfWork
     {
         IRepository<User> UserRepository { get; }
+        IRepository<Message> MessageRepository { get; }
         void SaveChanges();
         Task SaveChangesAsync();
         void Dispose();

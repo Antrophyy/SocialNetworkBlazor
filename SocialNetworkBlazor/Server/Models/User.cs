@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SocialNetworkBlazor.Server.Models
 {
@@ -11,5 +13,11 @@ namespace SocialNetworkBlazor.Server.Models
         [Required]
         [MaxLength(50)]
         public string LastName { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        [Required]
+        public int ContactId { get; set; }
+        public DateTimeOffset? LastLoginDate { get; set; }
+        [Required]
+        public bool IsOnline { get; set; }
     }
 }

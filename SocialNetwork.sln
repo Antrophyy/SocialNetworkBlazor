@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30626.31
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialNetworkBlazor.Server", "SocialNetworkBlazor\Server\SocialNetworkBlazor.Server.csproj", "{36D80649-F75F-4055-87D1-0272EC8B7CE7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SocialNetworkBlazor.Server", "SocialNetworkBlazor\Server\SocialNetworkBlazor.Server.csproj", "{36D80649-F75F-4055-87D1-0272EC8B7CE7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialNetworkBlazor.Client", "SocialNetworkBlazor\Client\SocialNetworkBlazor.Client.csproj", "{2BC68EB8-859B-40DB-8F90-971473C39822}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SocialNetworkBlazor.Client", "SocialNetworkBlazor\Client\SocialNetworkBlazor.Client.csproj", "{2BC68EB8-859B-40DB-8F90-971473C39822}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialNetworkBlazor.Shared", "SocialNetworkBlazor\Shared\SocialNetworkBlazor.Shared.csproj", "{370D012D-A91F-4B7D-91C1-476790D19CC0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SocialNetworkBlazor.Shared", "SocialNetworkBlazor\Shared\SocialNetworkBlazor.Shared.csproj", "{370D012D-A91F-4B7D-91C1-476790D19CC0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
