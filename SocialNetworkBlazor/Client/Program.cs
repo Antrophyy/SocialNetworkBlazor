@@ -1,3 +1,4 @@
+using Fluxor;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SocialNetworkBlazor.Client
 {
-    public static class Program
+    public class Program
     {
         public static async Task Main(string[] args)
         {
@@ -22,7 +23,15 @@ namespace SocialNetworkBlazor.Client
 
             builder.Services.AddApiAuthorization();
 
-            await builder.Build().RunAsync().ConfigureAwait(false);
+            // Fluxor
+            builder.Services.AddFluxor(config =>
+            {
+
+                config.ScanAssemblies(typeof(Program).Assembly);
+                config.UseReduxDevTools();
+            });
+
+            await builder.Build().RunAsync();
         }
     }
 }

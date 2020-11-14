@@ -1,12 +1,11 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using Fluxor;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.SignalR.Client;
+using SocialNetworkBlazor.Client.Store.Users;
+using SocialNetworkBlazor.Client.Store.Users.Actions;
 using SocialNetworkBlazor.Shared.Models;
 using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Net.Http.Json;
 using System.Threading.Tasks;
 
 namespace SocialNetworkBlazor.Client.Shared
@@ -14,34 +13,28 @@ namespace SocialNetworkBlazor.Client.Shared
     public partial class FriendsList : IAsyncDisposable
     {
         [Inject]
-        public HttpClient Http { get; set; }
-
-        [Inject]
         protected NavigationManager NavigationManager { get; set; }
 
         [CascadingParameter]
         protected Task<AuthenticationState> AuthenticationState { get; set; }
 
-        private HubConnection _signalRConnection;
+        [Inject]
+        private IState<UserState> UserState { get; set; }
 
-        public List<ClientUser> Users { get; set; } = new List<ClientUser>();
+        [Inject]
+        public IDispatcher Dispatcher { get; set; }
+
+        private HubConnection _signalRConnection;
 
         protected override async Task OnInitializedAsync()
         {
-            try
-            {
-                Users = await Http.GetFromJsonAsync<List<ClientUser>>("api/Users");
-            }
-            catch (AccessTokenNotAvailableException exception)
-            {
-                exception.Redirect();
-            }
-
             var state = await AuthenticationState;
             var user = state.User;
 
             if (user.Identity.IsAuthenticated)
                 await EnableSignalRConnection();
+
+            Dispatcher.Dispatch(new GetUsersAction());
         }
 
         private async Task EnableSignalRConnection()
@@ -52,7 +45,7 @@ namespace SocialNetworkBlazor.Client.Shared
 
             _signalRConnection.On<StatusChange>("statusChange", s =>
             {
-                foreach (var user in Users)
+                foreach (var user in UserState.Value.ClientUsers)
                 {
                     if (user.ContactId == s.ContactId)
                     {

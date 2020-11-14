@@ -1,10 +1,11 @@
 ﻿@page "/Messages/{ContactId:int}"
+@inherits Fluxor.Blazor.Web.Components.FluxorComponent
 <h3>Messages</h3>
 <div class="row rounded-lg overflow-hidden shadow">
     <!-- Chat Box-->
     <div class="col-12 px-0">
         <div class="px-4 py-5 chat-box bg-white" style="display:flex;flex-direction:column-reverse;">
-            @foreach (var message in AllMessages)
+            @foreach (var message in MessageState.Value.ClientMessages)
             {
                 @if (message.AuthorID == LoggedInUser.Claims.First(x => x.Type == "sub").Value)
                 {
@@ -33,11 +34,11 @@
                 }
             }
         </div>
-        <EditForm @ref="EditForm" Model="@NewMessage" OnValidSubmit="@HandleCompleteCreate">
+        <EditForm Model="@NewMessage" OnValidSubmit="@HandleCompleteCreate">
             <DataAnnotationsValidator />
             <ValidationSummary />
             <div class="input-group px-4 py-2">
-                <InputTextArea @ref="TextArea" @bind-Value="NewMessage.Content" class="form-control rounded-0 border-0 py-4 bg-light " />
+                <InputTextArea @bind-Value="NewMessage.Content" class="form-control rounded-0 border-0 py-4 bg-light " />
                 <div class="input-group-append">
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
