@@ -1,7 +1,7 @@
 ﻿using SocialNetworkBlazor.Shared.Models;
 using System.Collections.Generic;
 
-namespace SocialNetworkBlazor.Client.Store.Users.Actions
+namespace SocialNetworkBlazor.Client.Store.User.Actions
 {
     public class GetUsersAction
     {

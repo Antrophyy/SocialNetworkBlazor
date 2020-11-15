@@ -1,5 +1,5 @@
 ﻿using Fluxor;
-using SocialNetworkBlazor.Client.Store.Users.Actions;
+using SocialNetworkBlazor.Client.Store.User.Actions;
 using System.Threading.Tasks;
 
 namespace SocialNetworkBlazor.Client.Store.User.Effects

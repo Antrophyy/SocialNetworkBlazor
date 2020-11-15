@@ -1,0 +1,26 @@
+﻿@page "/EditProfile"
+
+<h3>EditProfile</h3>
+@if (ClientUserUpdated.ProfileImage?.Length != 0)
+{
+    <img class="rounded m-1" src="@ImageDataUrl" />
+}
+<EditForm Model="@ClientUserUpdated" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label for="file-upload">Profile Image</label>
+        <InputFile id="file-upload" OnChange="@OnInputFileChanged"></InputFile>
+    </div>
+
+    <div class="form-group">
+        <label for="first-name">First Name</label>
+        <InputText id="first-name" @bind-Value="@ClientUserUpdated.FirstName" Class="form-control" />
+    </div>
+    <div class="form-group">
+        <label for="last-name">Last Name</label>
+        <InputText id="last-name" @bind-Value="@ClientUserUpdated.LastName" Class="form-control" />
+    </div>
+    <button type="submit" class="btn-primary">Submit</button>
+</EditForm>

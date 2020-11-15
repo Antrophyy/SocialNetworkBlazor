@@ -2,7 +2,7 @@
 using SocialNetworkBlazor.Shared.Models;
 using System.Collections.Generic;
 
-namespace SocialNetworkBlazor.Client.Store.Messages
+namespace SocialNetworkBlazor.Client.Store.Message
 {
     public record MessageState
     {

@@ -1,4 +1,4 @@
-﻿namespace SocialNetworkBlazor.Client.Store.Users.Actions
+﻿namespace SocialNetworkBlazor.Client.Store.User.Actions
 {
     public class UserFailedAction
     {

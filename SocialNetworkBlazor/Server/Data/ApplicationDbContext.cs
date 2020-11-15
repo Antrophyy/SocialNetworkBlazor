@@ -18,8 +18,17 @@ namespace SocialNetworkBlazor.Server.Data
         {
             base.OnModelCreating(builder);
 
-            builder.Entity<Message>().HasKey(p => p.Id);
-            builder.Entity<Message>().Property(p => p.Id).IsRequired().ValueGeneratedOnAdd();
+            builder.Entity<Message>()
+                .HasKey(p => p.Id);
+
+            builder.Entity<Message>()
+                .Property(p => p.Id)
+                .IsRequired()
+                .ValueGeneratedOnAdd();
+
+            builder.Entity<User>()
+                .Property(b => b.ProfileImageTitle)
+                .HasDefaultValue("no_profile_image.png");
         }
     }
 }

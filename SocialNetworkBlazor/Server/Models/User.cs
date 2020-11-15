@@ -19,5 +19,8 @@ namespace SocialNetworkBlazor.Server.Models
         public DateTimeOffset? LastLoginDate { get; set; }
         [Required]
         public bool IsOnline { get; set; }
+        [Required]
+        [MaxLength(200)]
+        public string ProfileImageTitle { get; set; }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
-using SocialNetworkBlazor.Client.Store.Messages.Actions;
+using SocialNetworkBlazor.Client.Store.Message.Actions;
 using SocialNetworkBlazor.Shared.Models;
 using System.Collections.Generic;
 using System.Net.Http;

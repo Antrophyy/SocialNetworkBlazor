@@ -1,14 +1,14 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
-using SocialNetworkBlazor.Client.Store.Messages.Actions;
+using SocialNetworkBlazor.Client.Store.Message.Actions;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 
 namespace SocialNetworkBlazor.Client.Store.Message.Effect
 {
-    public class AddMessageEffect : Effect<AddMessageAction>
+    public class AddMessageEffect : Effect<SendMessageAction>
     {
         private readonly HttpClient _httpClient;
         private readonly NavigationManager _navigationManager;
@@ -19,7 +19,7 @@ namespace SocialNetworkBlazor.Client.Store.Message.Effect
             _navigationManager = navigationManager;
         }
 
-        protected override async Task HandleAsync(AddMessageAction action, IDispatcher dispatcher)
+        protected override async Task HandleAsync(SendMessageAction action, IDispatcher dispatcher)
         {
             try
             {
@@ -30,7 +30,7 @@ namespace SocialNetworkBlazor.Client.Store.Message.Effect
                     return;
                 }
 
-                dispatcher.Dispatch(new AddMessageSuccessAction());
+                dispatcher.Dispatch(new SendMessageSuccessAction());
             }
             catch (AccessTokenNotAvailableException e)
             {

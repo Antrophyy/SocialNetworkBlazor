@@ -1,7 +1,7 @@
 ﻿using Fluxor;
-using SocialNetworkBlazor.Client.Store.Messages.Actions;
+using SocialNetworkBlazor.Client.Store.Message.Actions;
 
-namespace SocialNetworkBlazor.Client.Store.Messages
+namespace SocialNetworkBlazor.Client.Store.Message
 {
     public class MessageReducer
     {
@@ -33,8 +33,18 @@ namespace SocialNetworkBlazor.Client.Store.Messages
         }
 
         [ReducerMethod]
-        public static MessageState AddMessage(MessageState state, AddMessageAction action)
+        public static MessageState SendMessage(MessageState state, SendMessageAction action)
         {
+            return state with
+            {
+                ClientMessages = state.ClientMessages
+            };
+        }
+
+        [ReducerMethod]
+        public static MessageState RecieveMessage(MessageState state, RecieveMessageAction action)
+        {
+            state.ClientMessages.Insert(0, action.Message);
             return state with
             {
                 ClientMessages = state.ClientMessages

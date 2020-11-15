@@ -4,6 +4,7 @@ using SocialNetworkBlazor.Server.Service;
 using SocialNetworkBlazor.Shared.Models;
 using System;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace SocialNetworkBlazor.Server
@@ -34,7 +35,14 @@ namespace SocialNetworkBlazor.Server
         }
         private async Task SetIsOnlineProperty(bool isOnline)
         {
-            string userId = Context.User.Claims.First(x => x.Type == "sub").Value;
+            Claim idClaim = Context.User.Claims.SingleOrDefault(x => x.Type == "sub");
+
+            if (idClaim == null || !(idClaim.Value is string))
+            {
+                return;
+            }
+
+            string userId = idClaim.Value;
 
             var user = await _uow.UserRepository.GetById(userId);
 

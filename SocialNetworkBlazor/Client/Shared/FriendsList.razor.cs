@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.SignalR.Client;
-using SocialNetworkBlazor.Client.Store.Users;
-using SocialNetworkBlazor.Client.Store.Users.Actions;
+using SocialNetworkBlazor.Client.Store.User.Actions;
+using SocialNetworkBlazor.Client.Store.User;
 using SocialNetworkBlazor.Shared.Models;
 using System;
 using System.Threading.Tasks;
@@ -31,10 +31,16 @@ namespace SocialNetworkBlazor.Client.Shared
             var state = await AuthenticationState;
             var user = state.User;
 
-            if (user.Identity.IsAuthenticated)
+            if (user.Identity.IsAuthenticated && _signalRConnection == null)
                 await EnableSignalRConnection();
 
             Dispatcher.Dispatch(new GetUsersAction());
+        }
+
+        protected override async Task OnParametersSetAsync()
+        {
+            if (_signalRConnection == null)
+                await EnableSignalRConnection();
         }
 
         private async Task EnableSignalRConnection()
@@ -45,15 +51,7 @@ namespace SocialNetworkBlazor.Client.Shared
 
             _signalRConnection.On<StatusChange>("statusChange", s =>
             {
-                foreach (var user in UserState.Value.ClientUsers)
-                {
-                    if (user.ContactId == s.ContactId)
-                    {
-                        user.IsOnline = s.IsOnline;
-                        StateHasChanged();
-                        break;
-                    }
-                }
+                Dispatcher.Dispatch(new UpdateUserOnlineStatusAction(s.IsOnline, s.ContactId));
             });
         }
 

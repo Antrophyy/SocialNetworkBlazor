@@ -2,8 +2,9 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.SignalR.Client;
-using SocialNetworkBlazor.Client.Store.Messages;
-using SocialNetworkBlazor.Client.Store.Messages.Actions;
+using SocialNetworkBlazor.Client.Store.Message;
+using SocialNetworkBlazor.Client.Store.Message.Actions;
+using SocialNetworkBlazor.Client.Store.User;
 using SocialNetworkBlazor.Shared.Models;
 using System;
 using System.Linq;
@@ -27,7 +28,14 @@ namespace SocialNetworkBlazor.Client.Pages
         private IState<MessageState> MessageState { get; set; }
 
         [Inject]
+        private IState<UserState> UserState { get; set; }
+
+        [Inject]
         public IDispatcher Dispatcher { get; set; }
+
+        public ClientUser SelectedUser { get; set; }
+
+        public string PageTitle { get; set; }
 
         public ClientMessageCreate NewMessage { get; set; } = new ClientMessageCreate();
 
@@ -42,6 +50,10 @@ namespace SocialNetworkBlazor.Client.Pages
 
             Dispatcher.Dispatch(new GetMessagesAction(ContactId));
             
+            SelectedUser = UserState.Value.ClientUsers.Where(x => x.ContactId == ContactId).First();
+
+            PageTitle = $"Messages with {SelectedUser.FullName}";
+
             NewMessage = new ClientMessageCreate();
         }
 
@@ -53,8 +65,7 @@ namespace SocialNetworkBlazor.Client.Pages
 
             _signalRConnection.On<ClientMessage>("message", m =>
             {
-                MessageState.Value.ClientMessages.Insert(0, m);
-                StateHasChanged();
+                Dispatcher.Dispatch(new RecieveMessageAction(m));
             });
         }
 
@@ -63,7 +74,7 @@ namespace SocialNetworkBlazor.Client.Pages
             NewMessage.AuthorID = LoggedInUser.Claims.First(x => x.Type == "sub").Value;
             NewMessage.RecipientContactId = ContactId;
 
-            Dispatcher.Dispatch(new AddMessageAction(NewMessage));
+            Dispatcher.Dispatch(new SendMessageAction(NewMessage));
 
             NewMessage = new ClientMessageCreate();
         }

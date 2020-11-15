@@ -2,7 +2,7 @@
 using SocialNetworkBlazor.Shared.Models;
 using System.Collections.Generic;
 
-namespace SocialNetworkBlazor.Client.Store.Users
+namespace SocialNetworkBlazor.Client.Store.User
 {
     public record UserState
     {
