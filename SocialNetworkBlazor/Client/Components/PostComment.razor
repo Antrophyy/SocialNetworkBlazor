@@ -1,0 +1,34 @@
+﻿@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+<div class="media mb-3 mx-4">
+
+    <img src="/storage/images/@Comment.Author.ProfileImageTitle" alt="user" width="32" class="rounded-circle py-2">
+    <div class="media-body">
+        <h6 class="mt-3 ml-2 font-weight-bold"><a href="#">@Comment.Author.FullName</a></h6>
+        <div class="rounded py-2 px-1 mb-2">
+            <p class="text-small mb-0 text-wrap text-break">@Comment.Content</p>
+        </div>
+    </div>
+</div>
+<div class="mx-4 row">
+    <a class="small col-4" href="" @onclick="() => HandleReplyClicked()" @onclick:preventDefault>Reply</a>
+    <p class="small text-muted col-4">@Comment.PostedAt.ToString("H:mm | MMM dd")</p>
+    @if (Comment.Replies.Count > 0)
+    {
+        <a class="small text-right col-4" href="" @onclick="() => HandleRepliesExpansion()" @onclick:preventDefault>@Comment.Replies.Count Replies</a>
+    }
+</div>
+@if (AreRepliesShown)
+{
+    @foreach (var reply in Comment.Replies)
+    {
+        <div class="border border-primary rounded mb-3 mx-5">
+            <PostComment Comment="@reply" ParentPostId="ParentPostId"/>
+        </div>
+    }
+}
+@if (IsReplyClicked)
+{
+    <CreateNewPostComment ParentPostId="ParentPostId" Comment="Comment" CommentSent="HandleCommentSent"/>
+}
+
+

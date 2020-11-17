@@ -1,0 +1,46 @@
+﻿@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+
+<div class="row">
+    <div class="card bg-light mb-3 mx-auto" style="max-width: 40rem; min-width:40rem;">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-1">
+                    <a href="/profile/@Post.Author.ContactId"><img src="/storage/images/@Post.Author.ProfileImageTitle" width="44" height="44" /></a>
+                </div>
+                <div class="col-11">
+                    <div class="row">
+                        <div class="col-auto">
+                            <span class="font-weight-bold text-left"><a href="/profile/@Post.Author.ContactId">@Post.Author.FullName</a></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-auto text-left">
+                            <small>@TimePassedString</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <p class="card-text">@Post.Content</p>
+        </div>
+        <div class="card-footer">
+            <div class="row">
+                <div class="col-12 text-right"><a href="" @onclick="() => HandleCommentsExpansion()" @onclick:preventDefault>@Post.Comments.Count Comments</a></div>
+            </div>
+            <div class="row">
+                <button class="btn btn-primary mx-auto btn-sm" @onclick="() => HandleCommentsExpansion()">Comment</button>
+            </div>
+        </div>
+        @if (AreCommentsExpanded)
+        {
+            <CreateNewPostComment ParentPostId="@Post.Id" />
+            @foreach (var comment in Post.Comments)
+            {
+                <div class="border border-primary rounded">
+                    <PostComment ParentPostId="@Post.Id" Comment="comment"></PostComment>
+                </div>
+            }
+        }
+    </div>
+</div>

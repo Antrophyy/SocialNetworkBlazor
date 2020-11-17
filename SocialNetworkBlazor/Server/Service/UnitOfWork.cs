@@ -10,6 +10,9 @@ namespace SocialNetworkBlazor.Server.Service
     {
         private IRepository<User> _userRepository;
         private IRepository<Message> _messageRepository;
+        private IRepository<Post> _postRepository;
+        private IRepository<Comment> _commentRepository;
+
         private readonly ApplicationDbContext _context;
         private bool disposed;
 
@@ -35,6 +38,26 @@ namespace SocialNetworkBlazor.Server.Service
                 if (_messageRepository == null)
                     _messageRepository = new Repository<Message>(_context);
                 return _messageRepository;
+            }
+        }
+
+        public IRepository<Post> PostRepository
+        {
+            get
+            {
+                if (_postRepository == null)
+                    _postRepository = new Repository<Post>(_context);
+                return _postRepository;
+            }
+        }
+
+        public IRepository<Comment> CommentRepository
+        {
+            get
+            {
+                if (_commentRepository == null)
+                    _commentRepository = new Repository<Comment>(_context);
+                return _commentRepository;
             }
         }
 

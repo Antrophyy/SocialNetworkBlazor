@@ -1,0 +1,17 @@
+﻿@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+
+<div class="mb-3">
+    <div class="mx-auto" style="max-width: 40rem;">
+        <EditForm Model="@ClientCommentCreated" OnValidSubmit="@HandleValidSubmit">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <div class="input-group px-4 py-2">
+                <img src="/storage/images/@LoggedInUser?.ProfileImageTitle" height="26" width="26" />
+                <InputTextArea @bind-Value="@ClientCommentCreated.Content" Class="form-control rounded border-secondary py-4 bg-light" placeholder="Write a reply..." />
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-primary">Send</button>
+                </div>
+            </div>
+        </EditForm>
+    </div>
+</div>

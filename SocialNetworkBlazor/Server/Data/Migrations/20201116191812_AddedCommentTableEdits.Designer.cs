@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SocialNetworkBlazor.Server.Data;
 
 namespace SocialNetworkBlazor.Server.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201116191812_AddedCommentTableEdits")]
+    partial class AddedCommentTableEdits
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -264,8 +266,7 @@ namespace SocialNetworkBlazor.Server.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int?>("CommentId")
-                        .IsRequired()
+                    b.Property<int>("CommentId")
                         .HasColumnType("int");
 
                     b.Property<string>("Content")
@@ -500,16 +501,13 @@ namespace SocialNetworkBlazor.Server.Data.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("SocialNetworkBlazor.Server.Models.Post", "Post")
+                    b.HasOne("SocialNetworkBlazor.Server.Models.Post", null)
                         .WithMany("Comments")
-                        .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.NoAction);
+                        .HasForeignKey("PostId");
 
                     b.Navigation("Author");
 
                     b.Navigation("ParentComment");
-
-                    b.Navigation("Post");
                 });
 
             modelBuilder.Entity("SocialNetworkBlazor.Server.Models.Post", b =>

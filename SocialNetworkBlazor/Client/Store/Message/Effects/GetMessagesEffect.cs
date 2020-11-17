@@ -20,6 +20,7 @@ namespace SocialNetworkBlazor.Client.Store.Message.Effect
             _httpClient = httpClient;
             _navigationManager = navigationManager;
         }
+
         protected override async Task HandleAsync(GetMessagesAction action, IDispatcher dispatcher)
         {
             try

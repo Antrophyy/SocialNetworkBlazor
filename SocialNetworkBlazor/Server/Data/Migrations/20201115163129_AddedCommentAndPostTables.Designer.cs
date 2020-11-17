@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SocialNetworkBlazor.Server.Data;
 
 namespace SocialNetworkBlazor.Server.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201115163129_AddedCommentAndPostTables")]
+    partial class AddedCommentAndPostTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -265,7 +267,6 @@ namespace SocialNetworkBlazor.Server.Data.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int?>("CommentId")
-                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<string>("Content")
@@ -494,22 +495,15 @@ namespace SocialNetworkBlazor.Server.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SocialNetworkBlazor.Server.Models.Comment", "ParentComment")
+                    b.HasOne("SocialNetworkBlazor.Server.Models.Comment", null)
                         .WithMany("Replies")
-                        .HasForeignKey("CommentId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .HasForeignKey("CommentId");
 
-                    b.HasOne("SocialNetworkBlazor.Server.Models.Post", "Post")
+                    b.HasOne("SocialNetworkBlazor.Server.Models.Post", null)
                         .WithMany("Comments")
-                        .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.NoAction);
+                        .HasForeignKey("PostId");
 
                     b.Navigation("Author");
-
-                    b.Navigation("ParentComment");
-
-                    b.Navigation("Post");
                 });
 
             modelBuilder.Entity("SocialNetworkBlazor.Server.Models.Post", b =>

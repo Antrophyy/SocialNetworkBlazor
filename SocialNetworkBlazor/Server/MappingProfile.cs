@@ -18,6 +18,18 @@ namespace SocialNetworkBlazor.Server
 
             CreateMap<ClientMessageCreate, Message>();
             CreateMap<Message, ClientMessageCreate>();
+
+            CreateMap<Post, ClientPost>();
+            CreateMap<ClientPost, Post>();
+
+            CreateMap<Post, ClientPostCreate>();
+            CreateMap<ClientPostCreate, Post>();
+
+            CreateMap<Comment, ClientComment>();
+            CreateMap<ClientComment, Comment>();
+
+            CreateMap<Comment, ClientCommentCreate>();
+            CreateMap<ClientCommentCreate, Comment>();
         }
     }
 }

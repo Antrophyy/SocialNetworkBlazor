@@ -34,7 +34,8 @@ namespace SocialNetworkBlazor.Client.Shared
             if (user.Identity.IsAuthenticated && _signalRConnection == null)
                 await EnableSignalRConnection();
 
-            Dispatcher.Dispatch(new GetUsersAction());
+            if (UserState.Value.ClientUsers.Count == 0)
+                Dispatcher.Dispatch(new GetUsersAction());
         }
 
         protected override async Task OnParametersSetAsync()

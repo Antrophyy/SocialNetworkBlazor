@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SocialNetworkBlazor.Server.Data;
 
 namespace SocialNetworkBlazor.Server.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201116193433_UpdatedCommentTableToWOrk")]
+    partial class UpdatedCommentTableToWOrk
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -264,8 +266,7 @@ namespace SocialNetworkBlazor.Server.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int?>("CommentId")
-                        .IsRequired()
+                    b.Property<int>("CommentId")
                         .HasColumnType("int");
 
                     b.Property<string>("Content")
@@ -273,7 +274,7 @@ namespace SocialNetworkBlazor.Server.Data.Migrations
                         .HasMaxLength(2000)
                         .HasColumnType("nvarchar(2000)");
 
-                    b.Property<int?>("PostId")
+                    b.Property<int>("ParentPostId")
                         .HasColumnType("int");
 
                     b.Property<DateTimeOffset>("PostedAt")
@@ -285,7 +286,7 @@ namespace SocialNetworkBlazor.Server.Data.Migrations
 
                     b.HasIndex("CommentId");
 
-                    b.HasIndex("PostId");
+                    b.HasIndex("ParentPostId");
 
                     b.ToTable("Comment");
                 });
@@ -500,16 +501,17 @@ namespace SocialNetworkBlazor.Server.Data.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("SocialNetworkBlazor.Server.Models.Post", "Post")
+                    b.HasOne("SocialNetworkBlazor.Server.Models.Post", "ParentPost")
                         .WithMany("Comments")
-                        .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.NoAction);
+                        .HasForeignKey("ParentPostId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
                     b.Navigation("Author");
 
                     b.Navigation("ParentComment");
 
-                    b.Navigation("Post");
+                    b.Navigation("ParentPost");
                 });
 
             modelBuilder.Entity("SocialNetworkBlazor.Server.Models.Post", b =>

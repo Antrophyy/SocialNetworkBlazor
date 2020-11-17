@@ -39,6 +39,8 @@ namespace SocialNetworkBlazor.Server
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IRepository<User>, Repository<User>>();
             services.AddScoped<IRepository<Message>, Repository<Message>>();
+            services.AddScoped<IRepository<Post>, Repository<Post>>();
+            services.AddScoped<IRepository<Comment>, Repository<Comment>>();
 
             services.AddCors(options =>
             {

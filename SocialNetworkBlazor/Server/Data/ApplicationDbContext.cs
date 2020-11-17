@@ -29,6 +29,28 @@ namespace SocialNetworkBlazor.Server.Data
             builder.Entity<User>()
                 .Property(b => b.ProfileImageTitle)
                 .HasDefaultValue("no_profile_image.png");
+
+            builder.Entity<Post>()
+                .HasOne(p => p.Author)
+                .WithMany(p => p.Posts)
+                .HasForeignKey(p => p.AuthorId);
+
+            builder.Entity<Post>()
+                .HasMany(p => p.Comments)
+                .WithOne(p => p.Post)
+                .HasForeignKey(p => p.PostId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Entity<Comment>()
+                .HasOne(p => p.Author)
+                .WithMany(p => p.Comments)
+                .HasForeignKey(p => p.AuthorId);
+
+            builder.Entity<Comment>()
+                .HasMany(p => p.Replies)
+                .WithOne(p => p.ParentComment)
+                .HasForeignKey(p => p.CommentId)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

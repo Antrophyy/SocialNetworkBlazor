@@ -38,9 +38,7 @@ namespace SocialNetworkBlazor.Server
             Claim idClaim = Context.User.Claims.SingleOrDefault(x => x.Type == "sub");
 
             if (idClaim == null || !(idClaim.Value is string))
-            {
                 return;
-            }
 
             string userId = idClaim.Value;
 
