@@ -5,7 +5,6 @@ using SocialNetworkBlazor.Server.Service;
 using SocialNetworkBlazor.Shared.Models;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -28,13 +27,30 @@ namespace SocialNetworkBlazor.Server.Controllers
 
         // GET: api/Users
         [HttpGet]
-        public async Task<ActionResult<List<ClientUser>>> GetAllUsers()
+        public async Task<IActionResult> GetAllUsers()
         {
-            var userList = await _uow.UserRepository.GetData().ConfigureAwait(false);
+            var userList = await _uow.UserRepository.GetData();
             var mappedList = _mapper.Map<List<ClientUser>>(userList);
             _logger.LogInformation($"Returned {userList.Count()} users.");
 
             return Ok(mappedList);
+        }
+
+        //GET: api/UsersFriends
+        [Route("[action]/{id}")]
+        [HttpGet]
+        public async Task<IActionResult> GetUsersFriends(string id)
+        {
+            var friends = await _uow.UserRepository.GetWithRawSql("SELECT * FROM AspNetUsers u"
+                + " INNER JOIN Friendship f"
+                + " ON u.Id = f.User1Id OR u.Id = f.User2Id"
+                + $" WHERE (f.User1Id = '{id}'"
+                + $" AND f.User2Id = u.Id) OR (f.User2Id = '{id}' AND f.User1Id = u.Id)");
+
+            var mappedFriends = _mapper.Map<List<ClientUser>>(friends);
+            _logger.LogInformation($"Returned {friends.Count()} friends.");
+
+            return Ok(mappedFriends);
         }
 
         // PUT: api/Users/user

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SocialNetworkBlazor.Server.Data;
 
 namespace SocialNetworkBlazor.Server.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201118145717_AddedFriendshipTableChangedStatus")]
+    partial class AddedFriendshipTableChangedStatus
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -545,6 +547,10 @@ namespace SocialNetworkBlazor.Server.Data.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
+                    b.HasOne("SocialNetworkBlazor.Server.Models.User", null)
+                        .WithMany("Friendships")
+                        .HasForeignKey("UserId");
+
                     b.Navigation("User1");
 
                     b.Navigation("User2");
@@ -574,6 +580,8 @@ namespace SocialNetworkBlazor.Server.Data.Migrations
             modelBuilder.Entity("SocialNetworkBlazor.Server.Models.User", b =>
                 {
                     b.Navigation("Comments");
+
+                    b.Navigation("Friendships");
 
                     b.Navigation("Posts");
                 });

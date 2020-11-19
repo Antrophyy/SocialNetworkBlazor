@@ -6,12 +6,12 @@
 
 <div>
     <ul class="nav flex-column">
-        @foreach (var user in UserState.Value.ClientUsers)
+        @foreach (var user in UserState.Value.Friends)
         {
             <li class="nav-item px-3">
                 <NavLink class="nav-link" href="@($"messages/{user.ContactId}")" Match="NavLinkMatch.All">
 
-                    <span><img src="/storage/images/@user.ProfileImageTitle" alt="No profile image" width="24" height="24" /></span>
+                    <span><img src="/storage/images/@user.ProfileImageTitle" alt="Profile image" width="24" height="24" /></span>
 
                     <div class="d-flex flex-fill text-left">
                         <span class="ml-3">@user.FullName</span>

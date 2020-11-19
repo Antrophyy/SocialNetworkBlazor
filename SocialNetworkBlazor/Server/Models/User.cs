@@ -25,5 +25,7 @@ namespace SocialNetworkBlazor.Server.Models
         public string ProfileImageTitle { get; set; }
         public ICollection<Post> Posts { get; set; }
         public ICollection<Comment> Comments { get; set; }
+        [NotMapped]
+        public ICollection<Friendship> Friendships { get; set; }
     }
 }

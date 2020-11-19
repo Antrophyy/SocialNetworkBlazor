@@ -51,6 +51,20 @@ namespace SocialNetworkBlazor.Server.Data
                 .WithOne(p => p.ParentComment)
                 .HasForeignKey(p => p.CommentId)
                 .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Entity<Friendship>()
+                .HasKey(f => new { f.User1Id, f.User2Id });
+
+            builder.Entity<Friendship>()
+                .HasOne(f => f.User1)
+                .WithMany()
+                .HasForeignKey(f => f.User1Id);
+
+            builder.Entity<Friendship>()
+                .HasOne(f => f.User2)
+                .WithMany()
+                .HasForeignKey(f => f.User2Id)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

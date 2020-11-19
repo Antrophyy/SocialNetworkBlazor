@@ -10,7 +10,8 @@ namespace SocialNetworkBlazor.Client.Store.User
         {
             return state with
             {
-                ClientUsers = state.ClientUsers
+                ClientUsers = state.ClientUsers,
+                Friends = state.Friends
             };
         }
 
@@ -19,7 +20,28 @@ namespace SocialNetworkBlazor.Client.Store.User
         {
             return state with
             {
-                ClientUsers = action.ClientUsers
+                ClientUsers = action.ClientUsers,
+                Friends = state.ClientUsers
+            };
+        }
+
+        [ReducerMethod]
+        public static UserState GetFriends(UserState state, GetFriendsAction action)
+        {
+            return state with
+            {
+                ClientUsers = state.ClientUsers,
+                Friends = state.Friends
+            };
+        }
+
+        [ReducerMethod]
+        public static UserState GetFriendsSuccess(UserState state, GetFriendsSuccessAction action)
+        {
+            return state with
+            {
+                ClientUsers = state.ClientUsers,
+                Friends = action.Friends
             };
         }
 
@@ -28,15 +50,16 @@ namespace SocialNetworkBlazor.Client.Store.User
         {
             return state with
             {
-                ClientUsers = state.ClientUsers
+                ClientUsers = state.ClientUsers,
+                Friends = state.Friends
             };
         }
 
         [ReducerMethod]
         public static UserState UpdateUserOnlineStatus(UserState state, UpdateUserOnlineStatusAction action)
         {
-            var users = state.ClientUsers;
-            foreach (var user in users)
+            var friends = state.Friends;
+            foreach (var user in friends)
             {
                 if (user.ContactId == action.ContactId)
                 {
@@ -46,7 +69,9 @@ namespace SocialNetworkBlazor.Client.Store.User
 
             return state with
             {
-                ClientUsers = users
+                Friends = friends,
+                ClientUsers = state.ClientUsers
+                
             };
         }
 
@@ -63,9 +88,21 @@ namespace SocialNetworkBlazor.Client.Store.User
                     user.ProfileImageTitle = action.User.ProfileImageTitle;
                 }
             }
+
+            var friends = state.Friends;
+            foreach (var friend in state.Friends)
+            {
+                if (friend.ContactId == action.User.ContactId)
+                {
+                    friend.FirstName = action.User.FirstName;
+                    friend.LastName = action.User.LastName;
+                    friend.ProfileImageTitle = action.User.ProfileImageTitle;
+                }
+            }
             return state with
             {
-                ClientUsers = users
+                ClientUsers = users,
+                Friends = friends
             };
         }
     }

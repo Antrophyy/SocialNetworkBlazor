@@ -10,6 +10,7 @@ namespace SocialNetworkBlazor.Server.Service
         IRepository<Message> MessageRepository { get; }
         IRepository<Post> PostRepository { get; }
         IRepository<Comment> CommentRepository { get; }
+        IRepository<Friendship> FriendshipRepository { get; }
         void SaveChanges();
         Task SaveChangesAsync();
         void Dispose();

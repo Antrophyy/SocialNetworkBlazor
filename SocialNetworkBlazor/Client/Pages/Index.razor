@@ -1,8 +1,7 @@
 ﻿@page "/"
 @inherits Fluxor.Blazor.Web.Components.FluxorComponent
-
 <Title Value="Dashboard"></Title>
-<CreateNewPost/>
+<CreateNewPost />
 @foreach (var post in PostState.Value.ClientPosts)
 {
     <FeedPost Post="post"></FeedPost>

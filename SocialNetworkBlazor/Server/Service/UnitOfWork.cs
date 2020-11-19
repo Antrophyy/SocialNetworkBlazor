@@ -12,6 +12,7 @@ namespace SocialNetworkBlazor.Server.Service
         private IRepository<Message> _messageRepository;
         private IRepository<Post> _postRepository;
         private IRepository<Comment> _commentRepository;
+        private IRepository<Friendship> _friendshipRepository;
 
         private readonly ApplicationDbContext _context;
         private bool disposed;
@@ -60,7 +61,15 @@ namespace SocialNetworkBlazor.Server.Service
                 return _commentRepository;
             }
         }
-
+        public IRepository<Friendship> FriendshipRepository
+        {
+            get
+            {
+                if (_friendshipRepository == null)
+                    _friendshipRepository = new Repository<Friendship>(_context);
+                return _friendshipRepository;
+            }
+        }
         public void SaveChanges()
         {
             _context.SaveChanges();

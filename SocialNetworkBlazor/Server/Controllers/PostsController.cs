@@ -27,14 +27,26 @@ namespace SocialNetworkBlazor.Server.Controllers
         }
 
         // GET: api/Posts
-        [HttpGet]
-        public async Task<ActionResult<List<ClientPost>>> GetAllPosts()
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetAllPosts(string id)
         {
-            var postsList = await _uow.PostRepository.GetData(includeProperties: "Author, Comments",
-                orderBy: new Func<IQueryable<Post>, IOrderedQueryable<Post>>(x=>x.OrderBy(x=>x.PostedAt)));
+            var queryList = await _uow.PostRepository.GetWithRawSql("SELECT p.Id,p.AuthorId,p.Content,p.PostedAt FROM Friendship f"
+                + " INNER JOIN AspNetUsers u"
+                + " ON f.User1Id = u.Id OR f.User2Id = u.Id"
+                + " INNER JOIN Post p"
+                + " ON f.User1Id = p.AuthorId OR f.User2Id = p.AuthorId"
+                + $" WHERE (f.User1Id = p.AuthorId AND f.User2Id = '{id}')"
+                + $" OR (f.User2Id = p.AuthorId AND f.User1Id = '{id}')"
+                );
 
-            foreach (var post in postsList)
+            foreach (var post in queryList)
             {
+                var comments = await _uow.CommentRepository.GetData(x => x.PostId == post.Id);
+                post.Comments = comments.ToList();
+
+                var authorList = await _uow.UserRepository.GetData(x => x.Id == post.AuthorId);
+                post.Author = authorList.Single();
+
                 foreach (var comment in post.Comments)
                 {
                     var replies = await _uow.CommentRepository.GetData(x => x.CommentId == comment.Id,
@@ -43,7 +55,7 @@ namespace SocialNetworkBlazor.Server.Controllers
                     comment.Replies = replies.ToList();
                 }
             }
-            var mappedList = _mapper.Map<List<ClientPost>>(postsList);
+            var mappedList = _mapper.Map<List<ClientPost>>(queryList);
             _logger.LogInformation($"Returned {mappedList.Count} posts.");
 
             return Ok(mappedList);

@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Components;
 using SocialNetworkBlazor.Client.Store.Post;
 using SocialNetworkBlazor.Client.Store.Post.Actions;
-using SocialNetworkBlazor.Client.Store.User.Actions;
 using System.Threading.Tasks;
 
 namespace SocialNetworkBlazor.Client.Pages
@@ -17,8 +16,7 @@ namespace SocialNetworkBlazor.Client.Pages
 
         protected override async Task OnInitializedAsync()
         {
-            Dispatcher.Dispatch(new GetPostsAction());
-            Dispatcher.Dispatch(new GetUsersAction());
+            Dispatcher.Dispatch(new GetPostsAction("cf7bf6b8-0089-4b4b-86fd-6f4a3bf2a692"));
         }
     }
 }

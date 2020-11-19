@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SocialNetworkBlazor.Server.Data;
 
 namespace SocialNetworkBlazor.Server.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201118144908_AddedFriendshipTable2")]
+    partial class AddedFriendshipTable2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -298,13 +300,17 @@ namespace SocialNetworkBlazor.Server.Data.Migrations
                     b.Property<string>("User2Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("User1Id", "User2Id");
 
                     b.HasIndex("User2Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Friendship");
                 });
@@ -545,6 +551,10 @@ namespace SocialNetworkBlazor.Server.Data.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
+                    b.HasOne("SocialNetworkBlazor.Server.Models.User", null)
+                        .WithMany("Friendships")
+                        .HasForeignKey("UserId");
+
                     b.Navigation("User1");
 
                     b.Navigation("User2");
@@ -574,6 +584,8 @@ namespace SocialNetworkBlazor.Server.Data.Migrations
             modelBuilder.Entity("SocialNetworkBlazor.Server.Models.User", b =>
                 {
                     b.Navigation("Comments");
+
+                    b.Navigation("Friendships");
 
                     b.Navigation("Posts");
                 });

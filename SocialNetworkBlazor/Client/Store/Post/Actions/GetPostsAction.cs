@@ -5,6 +5,11 @@ namespace SocialNetworkBlazor.Client.Store.Post.Actions
 {
     public class GetPostsAction
     {
+        public string UserId { get; private set; }
+        public GetPostsAction(string userId)
+        {
+            UserId = userId;
+        }
     }
 
     public class GetPostsSuccessAction

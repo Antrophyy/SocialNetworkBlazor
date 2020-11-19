@@ -7,6 +7,7 @@ using SocialNetworkBlazor.Client.Store.User;
 using SocialNetworkBlazor.Shared.Models;
 using System;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace SocialNetworkBlazor.Client.Shared
 {
@@ -35,7 +36,10 @@ namespace SocialNetworkBlazor.Client.Shared
                 await EnableSignalRConnection();
 
             if (UserState.Value.ClientUsers.Count == 0)
+            {
                 Dispatcher.Dispatch(new GetUsersAction());
+                Dispatcher.Dispatch(new GetFriendsAction(user.Claims.Single(x => x.Type == "sub").Value));
+            }
         }
 
         protected override async Task OnParametersSetAsync()
