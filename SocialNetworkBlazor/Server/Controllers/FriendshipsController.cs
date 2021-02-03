@@ -30,12 +30,11 @@ namespace SocialNetworkBlazor.Server.Controllers
 
         //GET:api/Friendships/Id
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetAllPending(string id)
+        public async Task<IActionResult> GetAll(string id)
         {
-            
-            var pending = await _uow.FriendshipRepository.GetData(x => x.User2Id == id, includeProperties: "User1, User2");
-            var mappedList = _mapper.Map<List<ClientFriendship>>(pending);
-            _logger.LogInformation($"Returned {mappedList.Count} pending requests for user {id}");
+            var relationship = await _uow.FriendshipRepository.GetData(x => x.User2Id == id || x.User1Id == id, includeProperties: "User1, User2");
+            var mappedList = _mapper.Map<List<ClientFriendship>>(relationship);
+            _logger.LogInformation($"Returned {mappedList.Count} relationships");
             return Ok(mappedList);
         }
 
@@ -51,15 +50,19 @@ namespace SocialNetworkBlazor.Server.Controllers
             _logger.LogInformation("New friend request inserted");
 
             var friendshipToSend = _mapper.Map<ClientFriendship>(clientFriendship);
+            friendshipToSend.User1 = clientFriendship.User1;
+            friendshipToSend.User2 = clientFriendship.User2;
             await _hubContext.Clients.All.SendAsync("friendRequest", _mapper.Map<ClientFriendship>(friendshipToSend));
 
             return Ok();
         }
 
-        [HttpDelete]
+        [HttpDelete("{user1Id}/{user2Id}")]
         public async Task<IActionResult> DeleteFriendRequest(string user1Id, string user2Id)
         {
-            var foundFriendship = await _uow.FriendshipRepository.GetData(x => x.User1Id == user1Id && x.User2Id == user2Id);
+            var foundFriendship = await _uow.FriendshipRepository.GetData(x => (x.User1Id == user1Id && x.User2Id == user2Id)
+            || (x.User1Id == user2Id && x.User2Id == user1Id));
+
             await _uow.FriendshipRepository.Delete(foundFriendship.Single());
             _logger.LogInformation("Friendship deleted");
             return Ok();

@@ -1,18 +1,20 @@
 ﻿@inherits Fluxor.Blazor.Web.Components.FluxorComponent
 
-<div class="row mb-3">
-    <div class="mx-auto" style="max-width: 40rem; min-width:40rem;">
-        <EditForm Model="@ClientPostCreated" OnValidSubmit="@HandleValidSubmit">
-            <DataAnnotationsValidator />
-            <ValidationSummary />
-            <div class="input-group px-4 py-2">
-                <img src="/storage/images/@LoggedInUser?.ProfileImageTitle" height="44" width="44" />
-                <InputTextArea @bind-Value="@ClientPostCreated.Content" Class="form-control rounded-0 border-0 py-4 bg-light" placeholder="@PlaceholderText" />
-                <div class="input-group-append">
-                    <button type="submit" class="btn btn-primary">Post</button>
+@if (LoggedInUser != null)
+{
+    <div class="row mb-3">
+        <div class="mx-auto" style="max-width: 40rem; min-width:40rem;">
+            <EditForm Model="@ClientPostCreated" OnValidSubmit="@HandleValidSubmit">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <div class="input-group px-4 py-2">
+                    <img src="/storage/images/@LoggedInUser.ProfileImageTitle" height="44" width="44" />
+                    <InputTextArea @bind-Value="@ClientPostCreated.Content" Class="form-control rounded-0 border-0 py-4 bg-light" placeholder="@PlaceholderText" />
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-primary">Post</button>
+                    </div>
                 </div>
-            </div>
-        </EditForm>
+            </EditForm>
+        </div>
     </div>
-</div>
-
+}

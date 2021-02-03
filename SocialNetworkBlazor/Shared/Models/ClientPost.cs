@@ -9,6 +9,6 @@ namespace SocialNetworkBlazor.Shared.Models
         public ClientUser Author { get; set; }
         public string Content { get; set; }
         public DateTimeOffset PostedAt { get; set; }
-        public ICollection<ClientComment> Comments { get; set; }
+        public List<ClientComment> Comments { get; set; }
     }
 }

@@ -7,7 +7,6 @@ namespace SocialNetworkBlazor.Client.Store.User
     public record UserState
     {
         public List<ClientUser> ClientUsers { get; init; }
-        public List<ClientUser> Friends { get; init; }
     }
 
     public class UserFeatureState : Feature<UserState>
@@ -19,7 +18,6 @@ namespace SocialNetworkBlazor.Client.Store.User
             return new UserState
             {
                 ClientUsers = new List<ClientUser>(),
-                Friends = new List<ClientUser>()
             };
         }
     }

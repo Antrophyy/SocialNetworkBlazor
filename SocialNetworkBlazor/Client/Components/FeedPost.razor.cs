@@ -25,6 +25,8 @@ namespace SocialNetworkBlazor.Client.Components
         protected override void OnParametersSet()
         {
             GetLastPosted();
+
+            base.OnParametersSet();
         }
 
         private void GetLastPosted()

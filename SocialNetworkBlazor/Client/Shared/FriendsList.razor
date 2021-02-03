@@ -6,21 +6,41 @@
 
 <div>
     <ul class="nav flex-column">
-        @foreach (var user in UserState.Value.Friends)
+        @foreach (var user in FriendshipState.Value.ClientFriendships.Where(x => x.Status == RelationshipStatusConstants.ACCEPTED))
         {
-            <li class="nav-item px-3">
-                <NavLink class="nav-link" href="@($"messages/{user.ContactId}")" Match="NavLinkMatch.All">
+            if (user.User1.Id == _userId)
+            {
+                <li class="nav-item px-3">
+                    <NavLink class="nav-link" href="@($"messages/{user.User2.ContactId}")" Match="NavLinkMatch.All">
 
-                    <span><img src="/storage/images/@user.ProfileImageTitle" alt="Profile image" width="24" height="24" /></span>
+                        <span><img src="/storage/images/@user.User2.ProfileImageTitle" alt="Profile image" width="24" height="24" /></span>
 
-                    <div class="d-flex flex-fill text-left">
-                        <span class="ml-3">@user.FullName</span>
-                    </div>
-                    <div class="d-flex flex-fill justify-content-end">
-                        <span><img src="/images/@GetOnlineStatus(user)" alt="Alternate Text" width="8" height="8" /></span>
-                    </div>
-                </NavLink>
-            </li>
+                        <div class="d-flex flex-fill text-left">
+                            <span class="ml-3">@user.User2.FullName</span>
+                        </div>
+                        <div class="d-flex flex-fill justify-content-end">
+                            <span><img src="/images/@GetOnlineStatus(user.User2)" alt="Alternate Text" width="8" height="8" /></span>
+                        </div>
+                    </NavLink>
+                </li>
+            }
+            else
+            {
+                <li class="nav-item px-3">
+                    <NavLink class="nav-link" href="@($"messages/{user.User1.ContactId}")" Match="NavLinkMatch.All">
+
+                        <span><img src="/storage/images/@user.User1.ProfileImageTitle" alt="Profile image" width="24" height="24" /></span>
+
+                        <div class="d-flex flex-fill text-left">
+                            <span class="ml-3">@user.User1.FullName</span>
+                        </div>
+                        <div class="d-flex flex-fill justify-content-end">
+                            <span><img src="/images/@GetOnlineStatus(user.User1)" alt="Alternate Text" width="8" height="8" /></span>
+                        </div>
+                    </NavLink>
+                </li>
+            }
+
         }
     </ul>
 </div>

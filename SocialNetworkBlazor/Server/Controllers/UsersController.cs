@@ -36,21 +36,19 @@ namespace SocialNetworkBlazor.Server.Controllers
             return Ok(mappedList);
         }
 
-        //GET: api/UsersFriends
-        [Route("[action]/{id}")]
-        [HttpGet]
-        public async Task<IActionResult> GetUsersFriends(string id)
+        // GET: api/Users/ContactId
+        [HttpGet("{contactId}")]
+        public async Task<IActionResult> GetSingleUser(int contactId)
         {
-            var friends = await _uow.UserRepository.GetWithRawSql("SELECT * FROM AspNetUsers u"
-                + " INNER JOIN Friendship f"
-                + " ON u.Id = f.User1Id OR u.Id = f.User2Id"
-                + $" WHERE (f.User1Id = '{id}'"
-                + $" AND f.User2Id = u.Id) OR (f.User2Id = '{id}' AND f.User1Id = u.Id)");
+            var user = await _uow.UserRepository.GetData(x => x.ContactId == contactId);
 
-            var mappedFriends = _mapper.Map<List<ClientUser>>(friends);
-            _logger.LogInformation($"Returned {friends.Count()} friends.");
+            if (user.SingleOrDefault() == null)
+                return NotFound($"The user with contactId {contactId} was not found.");
 
-            return Ok(mappedFriends);
+            var mappedUser = _mapper.Map<ClientUser>(user.Single());
+            _logger.LogInformation($"Returned {mappedUser.Id} user.");
+
+            return Ok(mappedUser);
         }
 
         // PUT: api/Users/user

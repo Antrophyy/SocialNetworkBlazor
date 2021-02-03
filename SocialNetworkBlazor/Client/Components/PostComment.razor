@@ -1,34 +1,35 @@
 ﻿@inherits Fluxor.Blazor.Web.Components.FluxorComponent
-<div class="media mb-3 mx-4">
-
-    <img src="/storage/images/@Comment.Author.ProfileImageTitle" alt="user" width="32" class="rounded-circle py-2">
-    <div class="media-body">
-        <h6 class="mt-3 ml-2 font-weight-bold"><a href="#">@Comment.Author.FullName</a></h6>
-        <div class="rounded py-2 px-1 mb-2">
-            <p class="text-small mb-0 text-wrap text-break">@Comment.Content</p>
+<div class="row">
+    <div class="timeline-body-comment w-100">
+        <div class="timeline-header-comment">
+            <span class="userimage"><a href="/Profile/@Comment.Author.ContactId"><img src="/storage/images/@Comment.Author.ProfileImageTitle" alt=""></a></span>
+            <span class="username"><a href="/Profile/@Comment.Author.ContactId"><small>@Comment.Author.FullName</small></a></span>
+            <span class="pull-right text-muted"><small>@Comment.PostedAt.ToString("dd MMMM yyyy HH:mm")</small></span>
+            <div class="timeline-content">
+                @Comment.Content
+            </div>
         </div>
+        <div class="timeline-likes">
+            <div class="stats-right">
+                @if (Comment.Replies.Count > 0)
+                {
+                    <a class="float-right" href="" @onclick="() => HandleRepliesExpansion()" @onclick:preventDefault>@Comment.Replies.Count Replies</a>
+                }
+            </div>
+            <a href="javascript:void(0);" class="m-r-15 text-inverse-lighter" @onclick="() => HandleReplyClicked()"><i class="fa fa-comments fa-fw fa-lg m-r-3" @onclick:preventDefault></i>Reply</a>
+        </div>
+        @if (AreRepliesShown)
+        {
+            @foreach (var reply in Comment.Replies)
+            {
+                <div class="pl-4">
+                    <PostComment Comment="@reply" ParentPostId="ParentPostId" />
+                </div>
+            }
+        }
+        @if (IsReplyClicked)
+        {
+            <CreateNewPostComment ParentPostId="ParentPostId" Comment="Comment" CommentSent="HandleCommentSent" />
+        }
     </div>
 </div>
-<div class="mx-4 row">
-    <a class="small col-4" href="" @onclick="() => HandleReplyClicked()" @onclick:preventDefault>Reply</a>
-    <p class="small text-muted col-4">@Comment.PostedAt.ToString("H:mm | MMM dd")</p>
-    @if (Comment.Replies.Count > 0)
-    {
-        <a class="small text-right col-4" href="" @onclick="() => HandleRepliesExpansion()" @onclick:preventDefault>@Comment.Replies.Count Replies</a>
-    }
-</div>
-@if (AreRepliesShown)
-{
-    @foreach (var reply in Comment.Replies)
-    {
-        <div class="border border-primary rounded mb-3 mx-5">
-            <PostComment Comment="@reply" ParentPostId="ParentPostId"/>
-        </div>
-    }
-}
-@if (IsReplyClicked)
-{
-    <CreateNewPostComment ParentPostId="ParentPostId" Comment="Comment" CommentSent="HandleCommentSent"/>
-}
-
-

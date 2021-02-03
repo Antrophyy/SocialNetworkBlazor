@@ -1,8 +1,14 @@
 ﻿@page "/"
 @inherits Fluxor.Blazor.Web.Components.FluxorComponent
 <Title Value="Dashboard"></Title>
+
 <CreateNewPost />
+
 @foreach (var post in PostState.Value.ClientPosts)
 {
-    <FeedPost Post="post"></FeedPost>
+    <div class="row mb-5">
+        <div class="mx-auto" style="max-width: 40rem; min-width:40rem;">
+            <FeedPost Post="post"/>
+        </div>
+    </div>
 }

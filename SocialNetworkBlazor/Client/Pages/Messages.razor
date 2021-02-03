@@ -2,49 +2,53 @@
 @inherits Fluxor.Blazor.Web.Components.FluxorComponent
 
 <Title Value="@PageTitle"></Title>
-<div class="row rounded-lg overflow-hidden shadow">
-    <!-- Chat Box-->
-    <div class="col-12 px-0">
-        <div class="px-4 py-5 chat-box bg-white" style="display:flex;flex-direction:column-reverse;">
-            @foreach (var message in MessageState.Value.ClientMessages)
-            {
-                @if (message.AuthorID == LoggedInUser.Claims.First(x => x.Type == "sub").Value)
+
+@if (SelectedUser != null)
+{
+    <div class="row rounded-lg overflow-hidden shadow">
+        <!-- Chat Box-->
+        <div class="col-12 px-0">
+            <div class="px-4 py-5 chat-box bg-white" style="display:flex;flex-direction:column-reverse;">
+                @foreach (var message in MessageState.Value.ClientMessages)
                 {
-                    <!-- Reciever Message-->
-                    <div class="media w-50 ml-auto mb-3">
-                        <div class="media-body">
-                            <div class="bg-primary rounded py-2 px-3 mb-2">
-                                <p class="text-small mb-0 text-white">@message.Content</p>
+                    @if (message.AuthorID == LoggedInUser.Claims.First(x => x.Type == "sub").Value)
+                    {
+                        <!-- Reciever Message-->
+                        <div class="media w-50 ml-auto mb-3">
+                            <div class="media-body">
+                                <div class="bg-primary rounded py-2 px-3 mb-2">
+                                    <p class="text-small mb-0 text-white">@message.Content</p>
+                                </div>
+                                <p class="small text-muted">@message.SentAt.Value.ToString("H:mm | MMM dd")</p>
                             </div>
-                            <p class="small text-muted">@message.SentAt.Value.ToString("H:mm | MMM dd")</p>
                         </div>
-                    </div>
-                }
-                else
-                {
-                    <!-- Sender Message-->
-                    <div class="media w-50 mb-3">
-                        <img src="/storage/images/@SelectedUser.ProfileImageTitle" alt="user" width="50" class="rounded-circle">
-                        <div class="media-body ml-3">
-                            <div class="bg-light rounded py-2 px-3 mb-2">
-                                <p class="text-small mb-0 text-muted">@message.Content</p>
+                    }
+                    else
+                    {
+                        <!-- Sender Message-->
+                        <div class="media w-50 mb-3">
+                            <img src="/storage/images/@SelectedUser.ProfileImageTitle" alt="user" width="50" class="rounded-circle">
+                            <div class="media-body ml-3">
+                                <div class="bg-light rounded py-2 px-3 mb-2">
+                                    <p class="text-small mb-0 text-muted">@message.Content</p>
+                                </div>
+                                <p class="small text-muted">@message.SentAt.Value.ToString("H:mm | MMM dd")</p>
                             </div>
-                            <p class="small text-muted">@message.SentAt.Value.ToString("H:mm | MMM dd")</p>
                         </div>
-                    </div>
+                    }
                 }
-            }
-        </div>
-        <EditForm Model="@NewMessage" OnValidSubmit="@HandleCompleteCreate">
-            <DataAnnotationsValidator />
-            <ValidationSummary />
-            <div class="input-group px-4 py-2">
-                <InputTextArea @bind-Value="NewMessage.Content" class="form-control rounded-0 border-0 py-4 bg-light " />
-                <div class="input-group-append">
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </div>
             </div>
-        </EditForm>
+            <EditForm Model="@NewMessage" OnValidSubmit="@HandleCompleteCreate">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <div class="input-group px-4 py-2">
+                    <InputTextArea @bind-Value="NewMessage.Content" class="form-control rounded-0 border-0 py-4 bg-light " />
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </div>
+            </EditForm>
+        </div>
     </div>
-</div>
+}
 

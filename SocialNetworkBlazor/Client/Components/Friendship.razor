@@ -1,33 +1,36 @@
 ﻿@inherits Fluxor.Blazor.Web.Components.FluxorComponent
 
-<div class="dropdown show">
-    <a class="oi oi-people mx-4" href="" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" @onclick:preventDefault>
-        @if (FriendshipState.Value.ClientFriendships.Exists(x => x.Status == RelationshipStatusConstants.PENDING))
-        {
-            <span class="badge badge-danger">@FriendshipState.Value.ClientFriendships.Count(x => x.Status == RelationshipStatusConstants.PENDING)</span>
-        }
-    </a>
-    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink" style="min-width: 30rem;">
-        <h6 class="dropdown-header bg-secondary text-white font-weight-bold">
-            <span>Friend Requests</span>
-        </h6>
-        <div class="dropdown-divider" />
-        @if (!FriendshipState.Value.ClientFriendships.Exists(x => x.Status == RelationshipStatusConstants.PENDING))
-        {
-            <p class="text-muted text-center">No Pending Friend Requests</p>
-        }
-        @foreach (var friendship in FriendshipState.Value.ClientFriendships)
-        {
-            if (friendship.Status == RelationshipStatusConstants.PENDING)
+@if (_loggedInUser != null)
+{
+    <div class="dropdown show">
+        <a class="oi oi-people mx-4" href="" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" @onclick:preventDefault>
+            @if (FriendshipState.Value.ClientFriendships.Exists(x => x.Status == RelationshipStatusConstants.PENDING && x.User2.Id == _loggedInUser.Id))
             {
-                <div class="d-flex flex-row dropdown-item justify-content-center">
-
-                    <span><a href="#"><img src="/storage/images/@friendship.User1.ProfileImageTitle" alt="Profile image" width="40" height="40" /></a></span>
-                    <span class="align-middle font-weight-bold mx-3"><a href="#">@friendship.User1.FullName</a></span>
-                    <span><a class="btn btn-primary btn-sm text-white mx-3" @onclick="() => HandleAcceptRequestButton(friendship)">Accept</a></span>
-                    <span><a class="btn btn-secondary btn-sm text-white mx-3" @onclick="() => HandleDeclineRequestButton(friendship)">Decline</a></span>
-                </div>
+                <span class="badge badge-danger">@FriendshipState.Value.ClientFriendships.Count(x => x.Status == RelationshipStatusConstants.PENDING)</span>
             }
-        }
+        </a>
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink" style="min-width: 30rem;">
+            <h6 class="dropdown-header bg-secondary text-white font-weight-bold">
+                <span>Friend Requests</span>
+            </h6>
+            <div class="dropdown-divider" />
+            @if (!FriendshipState.Value.ClientFriendships.Exists(x => x.Status == RelationshipStatusConstants.PENDING && x.User2.Id == _loggedInUser.Id))
+            {
+                <p class="text-muted text-center">No Pending Friend Requests</p>
+            }
+            @foreach (var friendship in FriendshipState.Value.ClientFriendships)
+            {
+                if (friendship.Status == RelationshipStatusConstants.PENDING && friendship.User2.Id == _loggedInUser.Id)
+                {
+                    <div class="d-flex flex-row dropdown-item justify-content-center">
+
+                        <span><a href="#"><img src="/storage/images/@friendship.User1.ProfileImageTitle" alt="Profile image" width="40" height="40" /></a></span>
+                        <span class="align-middle font-weight-bold mx-3"><a href="#">@friendship.User1.FullName</a></span>
+                        <span><a class="btn btn-primary btn-sm text-white mx-3" @onclick="() => HandleAcceptRequestButton(friendship)">Accept</a></span>
+                        <span><a class="btn btn-secondary btn-sm text-white mx-3" @onclick="() => HandleDeclineRequestButton(friendship)">Decline</a></span>
+                    </div>
+                }
+            }
+        </div>
     </div>
-</div>
+}

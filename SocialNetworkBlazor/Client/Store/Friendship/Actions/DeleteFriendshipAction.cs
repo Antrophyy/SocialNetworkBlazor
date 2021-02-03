@@ -4,20 +4,24 @@ namespace SocialNetworkBlazor.Client.Store.Friendship.Actions
 {
     public class DeleteFriendshipAction
     {
-        public ClientFriendship FriendshipToDelete { get; private set; }
+        public string User1Id { get; private set; }
+        public string User2Id { get; private set; }
 
-        public DeleteFriendshipAction(ClientFriendship friendshipToDelete)
+        public DeleteFriendshipAction(string user1Id, string user2Id)
         {
-            FriendshipToDelete = friendshipToDelete;
+            User1Id = user1Id;
+            User2Id = user2Id;
         }
     }
 
     public class DeleteFriendshipSuccessAction
     {
-        public ClientFriendship DeletedFriendship { get; private set; }
-        public DeleteFriendshipSuccessAction(ClientFriendship friendship)
+        public string User1Id { get; private set; }
+        public string User2Id { get; private set; }
+        public DeleteFriendshipSuccessAction(string user1Id, string user2Id)
         {
-            DeletedFriendship = friendship;
+            User1Id = user1Id;
+            User2Id = user2Id;
         }
     }
 }

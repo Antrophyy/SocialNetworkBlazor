@@ -28,7 +28,6 @@ namespace SocialNetworkBlazor.Client.Components
         public ClientUser LoggedInUser { get; set; }
         public ClaimsPrincipal UserClaims { get; set; }
         
-        
         protected override async Task OnInitializedAsync()
         {
             var state = await AuthenticationState;
@@ -46,6 +45,8 @@ namespace SocialNetworkBlazor.Client.Components
                 LoggedInUser = UserState.Value.ClientUsers.Where(x => x.ContactId == contactId).First();
                 StateHasChanged();
             };
+
+            await base.OnInitializedAsync();
         }
 
         protected override void OnAfterRender(bool firstRender)

@@ -1,47 +1,55 @@
 ﻿using Fluxor;
 using SocialNetworkBlazor.Client.Store.User.Actions;
+using System.Linq;
 
 namespace SocialNetworkBlazor.Client.Store.User
 {
     public static class UserReducer
     {
         [ReducerMethod]
+        public static UserState GetSingleUser(UserState state, GetSingleUserAction action)
+        {
+            return state with
+            {
+                ClientUsers = state.ClientUsers,
+            };
+        }
+
+        [ReducerMethod]
+        public static UserState GetSingleUserSucces(UserState state, GetSingleUserSuccessAction action)
+        {
+            if (!state.ClientUsers.Any(x => x.Id == action.User.Id))
+                state.ClientUsers.Add(action.User);
+
+
+            return state with
+            {
+                ClientUsers = state.ClientUsers,
+            };
+        }
+
+        [ReducerMethod]
         public static UserState GetUsers(UserState state, GetUsersAction action)
         {
             return state with
             {
                 ClientUsers = state.ClientUsers,
-                Friends = state.Friends
             };
         }
 
         [ReducerMethod]
         public static UserState GetUsersSuccess(UserState state, GetUsersSuccessAction action)
         {
-            return state with
+            foreach (var user in action.ClientUsers)
             {
-                ClientUsers = action.ClientUsers,
-                Friends = state.ClientUsers
-            };
-        }
+                if (state.ClientUsers.Any(x=>x.Id == user.Id))
+                    continue;
 
-        [ReducerMethod]
-        public static UserState GetFriends(UserState state, GetFriendsAction action)
-        {
+                state.ClientUsers.Add(user);
+            }
             return state with
             {
                 ClientUsers = state.ClientUsers,
-                Friends = state.Friends
-            };
-        }
-
-        [ReducerMethod]
-        public static UserState GetFriendsSuccess(UserState state, GetFriendsSuccessAction action)
-        {
-            return state with
-            {
-                ClientUsers = state.ClientUsers,
-                Friends = action.Friends
             };
         }
 
@@ -51,34 +59,27 @@ namespace SocialNetworkBlazor.Client.Store.User
             return state with
             {
                 ClientUsers = state.ClientUsers,
-                Friends = state.Friends
             };
         }
 
         [ReducerMethod]
         public static UserState UpdateUserOnlineStatus(UserState state, UpdateUserOnlineStatusAction action)
         {
-            var friends = state.Friends;
-            foreach (var user in friends)
+            foreach (var user in state.ClientUsers)
             {
                 if (user.ContactId == action.ContactId)
-                {
                     user.IsOnline = action.IsOnline;
-                }
             }
 
             return state with
             {
-                Friends = friends,
                 ClientUsers = state.ClientUsers
-                
             };
         }
 
         [ReducerMethod]
         public static UserState UpdateUser(UserState state, UpdateUserSuccessAction action)
         {
-            var users = state.ClientUsers;
             foreach (var user in state.ClientUsers)
             {
                 if (user.ContactId == action.User.ContactId)
@@ -89,20 +90,9 @@ namespace SocialNetworkBlazor.Client.Store.User
                 }
             }
 
-            var friends = state.Friends;
-            foreach (var friend in state.Friends)
-            {
-                if (friend.ContactId == action.User.ContactId)
-                {
-                    friend.FirstName = action.User.FirstName;
-                    friend.LastName = action.User.LastName;
-                    friend.ProfileImageTitle = action.User.ProfileImageTitle;
-                }
-            }
             return state with
             {
-                ClientUsers = users,
-                Friends = friends
+                ClientUsers = state.ClientUsers,
             };
         }
     }

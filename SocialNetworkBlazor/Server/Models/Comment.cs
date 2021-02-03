@@ -10,7 +10,6 @@ namespace SocialNetworkBlazor.Server.Models
         public int Id { get; set; }
         [Required]
         public string AuthorId { get; set; }
-        [Required]
         public int? CommentId { get; set; }
         public Comment ParentComment { get; set; }
         public int? PostId { get; set; }

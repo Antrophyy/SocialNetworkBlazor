@@ -1,0 +1,87 @@
+﻿@page "/Profile/{ContactId:int}"
+@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+
+@if (_selectedUser == null)
+{
+    <LoadingSpinner TitleMessage="Loading profile" />
+}
+else
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div id="content" class="content content-full-width">
+                    <!-- begin profile -->
+                    <div class="profile">
+                        <div class="profile-header">
+                            <!-- BEGIN profile-header-cover -->
+                            <div class="profile-header-cover"></div>
+                            <!-- END profile-header-cover -->
+                            <!-- BEGIN profile-header-content -->
+                            <div class="profile-header-content">
+                                <!-- BEGIN profile-header-img -->
+                                <div class="profile-header-img">
+                                    <img src="/storage/images/@_selectedUser?.ProfileImageTitle" alt="">
+                                </div>
+                                <!-- END profile-header-img -->
+                                <!-- BEGIN profile-header-info -->
+                                <div class="profile-header-info">
+                                    <h4 class="m-t-10 m-b-5">@_selectedUser?.FullName</h4>
+                                    <p class="m-b-10">UXUI + Frontend Developer</p>
+                                    <a href="javascript:void(0);" class="btn btn-sm btn-info mb-2">Edit Profile</a>
+                                    <a href="javascript:void(0);" class="btn btn-sm btn-success mb-2" @onclick="() => HandleAddFriendClicked()">Add Friend</a>
+                                    <a href="javascript:void(0);" class="btn btn-sm btn-danger mb-2" @onclick="() => HandleRemoveFriendClicked()">Remove Friend</a>
+                                </div>
+                                <!-- END profile-header-info -->
+                            </div>
+                            <!-- END profile-header-content -->
+                            <!-- BEGIN profile-header-tab -->
+                            <ul class="profile-header-tab nav nav-tabs">
+                                <li class="nav-item"><a href="#profile-about" class="nav-link" data-toggle="tab">ABOUT</a></li>
+                                <li class="nav-item"><a href="#profile-post" class="nav-link active show" data-toggle="tab">POSTS</a></li>
+                                <li class="nav-item"><a href="#profile-friends" class="nav-link" data-toggle="tab">FRIENDS</a></li>
+                            </ul>
+                            <!-- END profile-header-tab -->
+                        </div>
+                    </div>
+                    <!-- end profile -->
+                    <!-- begin profile-content -->
+                    <div class="profile-content">
+                        <!-- begin tab-content -->
+                        <div class="tab-content p-0">
+                            <!-- begin #profile-post tab -->
+                            <div class="tab-pane fade active show" id="profile-post">
+                                <!-- begin timeline -->
+                                <ul class="timeline">
+                                    @foreach (var post in PostState.Value.ClientPosts.Where(x => x.Author.ContactId == ContactId))
+                                    {
+                                        <li>
+                                            <ProfilePost Post="post" />
+                                        </li>
+                                    }
+                                </ul>
+                                <!-- end timeline -->
+                            </div>
+                            <!-- end #profile-post tab -->
+                            <div class="tab-pane fade" id="profile-friends">
+                                @foreach (var friendship in FriendshipState.Value.ClientFriendships.Where(x => x.Status == RelationshipStatusConstants.ACCEPTED))
+                                {
+                                    @if (friendship.User1.Id == _selectedUser.Id)
+                                    {
+                                        <FriendCard User="friendship.User2" />
+                                    }
+                                    else
+                                    {
+                                        <FriendCard User="friendship.User1" />
+                                    }
+                                }
+                            </div>
+                        </div>
+                        <!-- end tab-content -->
+                    </div>
+                    <!-- end profile-content -->
+                </div>
+            </div>
+        </div>
+    </div>
+}

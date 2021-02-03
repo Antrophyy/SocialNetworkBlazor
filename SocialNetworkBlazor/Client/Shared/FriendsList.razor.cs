@@ -2,12 +2,13 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.SignalR.Client;
-using SocialNetworkBlazor.Client.Store.User.Actions;
-using SocialNetworkBlazor.Client.Store.User;
 using SocialNetworkBlazor.Shared.Models;
 using System;
 using System.Threading.Tasks;
 using System.Linq;
+using SocialNetworkBlazor.Client.Store.Friendship.Actions;
+using SocialNetworkBlazor.Client.Store.Friendship;
+using SocialNetworkBlazor.Client.Store.User.Actions;
 
 namespace SocialNetworkBlazor.Client.Shared
 {
@@ -20,26 +21,40 @@ namespace SocialNetworkBlazor.Client.Shared
         protected Task<AuthenticationState> AuthenticationState { get; set; }
 
         [Inject]
-        private IState<UserState> UserState { get; set; }
+        private IState<FriendshipState> FriendshipState { get; set; }
 
         [Inject]
         public IDispatcher Dispatcher { get; set; }
 
         private HubConnection _signalRConnection;
+        private string _userId;
 
         protected override async Task OnInitializedAsync()
         {
             var state = await AuthenticationState;
             var user = state.User;
 
+            if (!user.Identity.IsAuthenticated)
+                return;
+
+            _userId = user.Claims.Single(x => x.Type == "sub").Value;
             if (user.Identity.IsAuthenticated && _signalRConnection == null)
                 await EnableSignalRConnection();
 
-            if (UserState.Value.ClientUsers.Count == 0)
-            {
-                Dispatcher.Dispatch(new GetUsersAction());
-                Dispatcher.Dispatch(new GetFriendsAction(user.Claims.Single(x => x.Type == "sub").Value));
-            }
+            Dispatcher.Dispatch(new GetFriendsAction(_userId));
+
+            FriendshipState.StateChanged += (sender, state) =>
+              {
+                  if (state.ClientFriendships.Count == 0)
+                      return;
+
+                  Console.WriteLine($"Friends Count: {state.ClientFriendships.Count} ");
+                  Console.WriteLine($"Status: {state.ClientFriendships.Single().Status}");
+                  Console.WriteLine($"User1Id: {state.ClientFriendships.Single().User1.Id}");
+                  Console.WriteLine($"User2Id: {state.ClientFriendships.Single().User2.Id}");
+                  Console.WriteLine($"LOGGED IN: {_userId}");
+                  StateHasChanged();
+              };
         }
 
         protected override async Task OnParametersSetAsync()

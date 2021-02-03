@@ -23,7 +23,7 @@ namespace SocialNetworkBlazor.Client.Store.Friendship.Effects
             try
             {
                 var response = await _httpClient.DeleteAsync(
-                    $"{_navigationManager.BaseUri}api/Friendships/{action.FriendshipToDelete.User1.Id}/{action.FriendshipToDelete.User2.Id}");
+                    $"{_navigationManager.BaseUri}api/Friendships/{action.User1Id}/{action.User2Id}");
 
                 if (!response.IsSuccessStatusCode)
                 {
@@ -31,7 +31,7 @@ namespace SocialNetworkBlazor.Client.Store.Friendship.Effects
                     return;
                 }
 
-                dispatcher.Dispatch(new DeleteFriendshipSuccessAction(action.FriendshipToDelete));
+                dispatcher.Dispatch(new DeleteFriendshipSuccessAction(action.User1Id, action.User2Id));
             }
             catch (AccessTokenNotAvailableException e)
             {

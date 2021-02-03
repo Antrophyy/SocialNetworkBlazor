@@ -1,7 +1,7 @@
 ﻿using SocialNetworkBlazor.Shared.Models;
 using System.Collections.Generic;
 
-namespace SocialNetworkBlazor.Client.Store.User.Actions
+namespace SocialNetworkBlazor.Client.Store.Friendship.Actions
 {
     public class GetFriendsAction
     {
@@ -14,9 +14,9 @@ namespace SocialNetworkBlazor.Client.Store.User.Actions
 
     public class GetFriendsSuccessAction
     {
-        public List<ClientUser> Friends { get; private set; }
+        public List<ClientFriendship> Friends { get; private set; }
 
-        public GetFriendsSuccessAction(List<ClientUser> friends)
+        public GetFriendsSuccessAction(List<ClientFriendship> friends)
         {
             Friends = friends;
         }

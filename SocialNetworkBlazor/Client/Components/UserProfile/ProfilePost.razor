@@ -1,12 +1,20 @@
-﻿@inherits Fluxor.Blazor.Web.Components.FluxorComponent
-
+﻿<!-- begin timeline-time -->
+<div class="timeline-time">
+    <span class="date">@Post.PostedAt.ToString("dd MMMM yyyy")</span>
+    <span class="time">@Post.PostedAt.ToString("HH:mm")</span>
+</div>
+<!-- end timeline-time -->
+<!-- begin timeline-icon -->
+<div class="timeline-icon">
+    <a href="javascript:;">&nbsp;</a>
+</div>
+<!-- end timeline-icon -->
+<!-- begin timeline-body -->
 <div class="timeline-body">
     <div class="timeline-header">
-        <span class="userimage"><a href="/Profile/@Post.Author.ContactId"><img src="/storage/images/@Post.Author.ProfileImageTitle" alt=""></a></span>
-        <span class="username"><a href="/Profile/@Post.Author.ContactId"><small>@Post.Author.FullName</small></a></span>
-        <span class="pull-right text-muted">@TimePassedString</span>
+        <span class="userimage"><img src="/storage/images/@Post.Author.ProfileImageTitle" alt=""></span>
+        <span class="username"><a href="javascript:;">@Post.Author.FullName</a> <small></small></span>
     </div>
-    <hr />
     <div class="timeline-content">
         <p>
             @Post.Content
@@ -30,3 +38,4 @@
         }
     }
 </div>
+<!-- end timeline-body -->

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.SignalR.Client;
 using SocialNetworkBlazor.Client.Store.Message;
 using SocialNetworkBlazor.Client.Store.Message.Actions;
 using SocialNetworkBlazor.Client.Store.User;
+using SocialNetworkBlazor.Client.Store.User.Actions;
 using SocialNetworkBlazor.Shared.Models;
 using System;
 using System.Linq;
@@ -48,13 +49,27 @@ namespace SocialNetworkBlazor.Client.Pages
             var state = await AuthenticationState;
             LoggedInUser = state.User;
 
-            Dispatcher.Dispatch(new GetMessagesAction(ContactId));
-            
-            SelectedUser = UserState.Value.ClientUsers.Where(x => x.ContactId == ContactId).First();
+            if (!LoggedInUser.Identity.IsAuthenticated)
+                return;
 
-            PageTitle = $"Messages with {SelectedUser.FullName}";
+            Dispatcher.Dispatch(new GetMessagesAction(ContactId));
+            Dispatcher.Dispatch(new GetSingleUserAction(ContactId));
+
+            UserState.StateChanged += (sender, state) =>
+            {
+                if (SelectedUser != null)
+                    return;
+
+                if (state.ClientUsers.Where(x => x.ContactId == ContactId).SingleOrDefault() == null)
+                    return;
+
+                SelectedUser = state.ClientUsers.Where(x => x.ContactId == ContactId).SingleOrDefault();
+                PageTitle = $"Messages with {SelectedUser.FullName}";
+            };
 
             NewMessage = new ClientMessageCreate();
+
+            await base.OnParametersSetAsync();
         }
 
         protected override async Task OnInitializedAsync()
@@ -67,6 +82,8 @@ namespace SocialNetworkBlazor.Client.Pages
             {
                 Dispatcher.Dispatch(new RecieveMessageAction(m));
             });
+
+            await base.OnInitializedAsync();
         }
 
         private void HandleCompleteCreate()
