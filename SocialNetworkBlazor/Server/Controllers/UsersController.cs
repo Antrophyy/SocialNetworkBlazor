@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SocialNetworkBlazor.Server.Service;
 using SocialNetworkBlazor.Shared.Models;
@@ -32,6 +33,19 @@ namespace SocialNetworkBlazor.Server.Controllers
             var userList = await _uow.UserRepository.GetData();
             var mappedList = _mapper.Map<List<ClientUser>>(userList);
             _logger.LogInformation($"Returned {userList.Count()} users.");
+
+            return Ok(mappedList);
+        }
+
+        // GET: api/Users/GetFilteredUsers
+        [HttpGet("GetFilteredUsers/{query}")]
+        public async Task<IActionResult> GetFilteredUsers(string query)
+        {
+            var userList = await _uow.UserRepository.GetData();
+
+            var filteredUsers = userList.Where(x => (x.FirstName.Contains(query, StringComparison.OrdinalIgnoreCase) || x.LastName.Contains(query, StringComparison.OrdinalIgnoreCase)));
+            var mappedList = _mapper.Map<List<ClientUser>>(filteredUsers);
+            _logger.LogInformation($"Returned {mappedList.Count} filtered users.");
 
             return Ok(mappedList);
         }

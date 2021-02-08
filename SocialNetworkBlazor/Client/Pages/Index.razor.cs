@@ -13,7 +13,7 @@ namespace SocialNetworkBlazor.Client.Pages
         protected Task<AuthenticationState> AuthenticationState { get; set; }
         [Inject]
         private IState<PostState> PostState { get; set; }
-
+        
         [Inject]
         public IDispatcher Dispatcher { get; set; }
 

@@ -38,6 +38,32 @@ namespace SocialNetworkBlazor.Client.Store.User
         }
 
         [ReducerMethod]
+        public static UserState GetFilteredUsers(UserState state, GetFilteredUsersAction action)
+        {
+            return state with
+            {
+                ClientUsers = state.ClientUsers
+            };
+        }
+
+        [ReducerMethod]
+        public static UserState GetFilteredUsersSuccess(UserState state, GetFilteredUsersSuccessAction action)
+        {
+            foreach (var user in action.FoundUsers)
+            {
+                if (state.ClientUsers.Any(x => x.Id == user.Id))
+                    continue;
+
+                state.ClientUsers.Add(user);
+            }
+
+            return state with
+            {
+                ClientUsers = state.ClientUsers
+            };
+        }
+
+        [ReducerMethod]
         public static UserState GetUsersSuccess(UserState state, GetUsersSuccessAction action)
         {
             foreach (var user in action.ClientUsers)

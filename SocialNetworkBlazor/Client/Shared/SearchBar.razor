@@ -1,0 +1,8 @@
+﻿<div class="col">
+    <RadzenAutoComplete Value="@_currentValue" Placeholder="Find new friends.."
+                        Data="@customCustomersData"
+                        TextProperty="FullName"
+                        Style="min-width:400px;"
+                        LoadData="@OnLoadData"
+                        Change=@(args => OnChange(args))/>
+</div>

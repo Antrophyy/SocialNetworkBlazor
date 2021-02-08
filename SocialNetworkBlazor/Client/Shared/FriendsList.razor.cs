@@ -44,17 +44,12 @@ namespace SocialNetworkBlazor.Client.Shared
             Dispatcher.Dispatch(new GetFriendsAction(_userId));
 
             FriendshipState.StateChanged += (sender, state) =>
-              {
-                  if (state.ClientFriendships.Count == 0)
-                      return;
+            {
+                if (state.ClientFriendships.Count == 0)
+                    return;
 
-                  Console.WriteLine($"Friends Count: {state.ClientFriendships.Count} ");
-                  Console.WriteLine($"Status: {state.ClientFriendships.Single().Status}");
-                  Console.WriteLine($"User1Id: {state.ClientFriendships.Single().User1.Id}");
-                  Console.WriteLine($"User2Id: {state.ClientFriendships.Single().User2.Id}");
-                  Console.WriteLine($"LOGGED IN: {_userId}");
-                  StateHasChanged();
-              };
+                StateHasChanged();
+            };
         }
 
         protected override async Task OnParametersSetAsync()
